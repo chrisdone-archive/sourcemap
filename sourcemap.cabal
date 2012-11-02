@@ -14,8 +14,13 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  exposed-modules:     VLQ
-  -- other-modules:
+  exposed-modules:     SourceMap, SourceMap.Types
+  other-modules:       VLQ
   hs-source-dirs:      src
   build-depends:       base ==4.5.*,
-                       bytestring
+                       bytestring >= 0.10.2.0,
+                       aeson,
+                       unordered-containers,
+                       attoparsec,
+                       process,
+                       utf8-string

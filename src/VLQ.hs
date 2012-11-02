@@ -11,8 +11,8 @@ module VLQ
   where
 
 import           Data.Bits hiding (shift)
-import           Data.ByteString (ByteString)
-import qualified Data.ByteString as B
+import           Data.ByteString.Lazy (ByteString)
+import qualified Data.ByteString.Lazy as B
 import           Data.Int
 import           Data.List
 import           Data.Word
