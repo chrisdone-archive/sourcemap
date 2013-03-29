@@ -2,7 +2,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS -Wall #-}
 
-module SourceMap where
+-- | Generate JSON from a source mapping.
+
+module SourceMap (generate) where
 
 import           SourceMap.Types
 import qualified VLQ as VLQ
@@ -19,7 +21,7 @@ import           Data.Maybe
 import           Data.Ord
 import           Data.STRef
 
--- | Generate the JSON.
+-- | Generate the JSON from a source mapping.
 generate :: SourceMapping -> Value
 generate SourceMapping{..} = Object (Map.fromList obj) where
   obj = [("version",toJSON version)
@@ -32,6 +34,7 @@ generate SourceMapping{..} = Object (Map.fromList obj) where
   sources = symbols mapSourceFile
   symbols f = sort (nub (mapMaybe f smMappings))
 
+-- | Encode the mappings to the source map format.
 encodeMappings :: [FilePath] -> [String] -> [Mapping] -> ByteString
 encodeMappings sources names = go . sortBy (comparing mapGenerated) where
   go mappings = runST $ do
