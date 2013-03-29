@@ -1,5 +1,5 @@
 name:                sourcemap
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Implementation of source maps as proposed by Google and Mozilla.
 description:         Implementation of source maps, revision 3, proposed by Google and Mozilla here
                      https://wiki.mozilla.org/DevTools/Features/SourceMap and here
@@ -7,17 +7,19 @@ description:         Implementation of source maps, revision 3, proposed by Goog
 license:             BSD3
 license-file:        LICENSE
 author:              Chris Done
+stability:           alpha
 maintainer:          chrisdone@gmail.com
--- copyright:
+copyright:           2012 Chris Done
 category:            Development
 build-type:          Simple
 cabal-version:       >=1.8
 
 library
+  ghc-options: -O2
   exposed-modules:     SourceMap, SourceMap.Types
   other-modules:       VLQ
   hs-source-dirs:      src
-  build-depends:       base ==4.5.*,
+  build-depends:       base > 4 && < 5,
                        bytestring >= 0.10.2.0,
                        aeson,
                        unordered-containers,
