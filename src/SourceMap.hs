@@ -14,6 +14,7 @@ import           Control.Monad.ST
 import           Data.Aeson hiding ((.=))
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as Bytes
+import           Data.ByteString.Lazy.UTF8 (fromString)
 import           Data.Foldable (forM_)
 import qualified Data.HashMap.Lazy as Map
 import           Data.List
@@ -57,7 +58,7 @@ encodeMappings sources names = go . sortBy (comparing mapGenerated) where
                                              (fromIntegral (fromEnum ';'))
                    return (posLine mapGenerated)
            else do when (i > 0)
-                        (result += ",")
+                        (result += (fromString ","))
                    return previousGeneratedLine
       -- Original generated column (also offsetted from previous entries).
       updating prevGenCol $ \previousGeneratedColumn -> do

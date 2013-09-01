@@ -1,5 +1,5 @@
 name:                sourcemap
-version:             0.1.0.3
+version:             0.1.1.0
 synopsis:            Implementation of source maps as proposed by Google and Mozilla.
 description:         Implementation of source maps, revision 3, proposed by Google and Mozilla here
                      <https://wiki.mozilla.org/DevTools/Features/SourceMap> and here
@@ -20,7 +20,7 @@ library
   other-modules:       VLQ
   hs-source-dirs:      src
   build-depends:       base >= 4 && < 5,
-                       bytestring >= 0.10.2.0,
+                       bytestring,
                        aeson,
                        unordered-containers,
                        attoparsec,
