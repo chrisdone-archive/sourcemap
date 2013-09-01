@@ -6,6 +6,7 @@ module SourceMap.Types where
 
 import Data.Int
 import Data.Monoid
+import Data.Text
 import Data.Function
 
 -- | The source mapping.
@@ -20,7 +21,7 @@ data Mapping = Mapping
   { mapGenerated  :: Pos
   , mapOriginal   :: Maybe Pos
   , mapSourceFile :: Maybe FilePath
-  , mapName       :: Maybe String
+  , mapName       :: Maybe Text
   } deriving Show
 
 -- | A source position.

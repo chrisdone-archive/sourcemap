@@ -21,6 +21,7 @@ import           Data.List
 import           Data.Maybe
 import           Data.Ord
 import           Data.STRef
+import           Data.Text (Text)
 
 -- | Generate the JSON from a source mapping.
 generate :: SourceMapping -> Value
@@ -36,7 +37,7 @@ generate SourceMapping{..} = Object (Map.fromList obj) where
   symbols f = sort (nub (mapMaybe f smMappings))
 
 -- | Encode the mappings to the source map format.
-encodeMappings :: [FilePath] -> [String] -> [Mapping] -> ByteString
+encodeMappings :: [FilePath] -> [Text] -> [Mapping] -> ByteString
 encodeMappings sources names = go . sortBy (comparing mapGenerated) where
   go mappings = runST $ do
     -- State.
