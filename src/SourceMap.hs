@@ -22,6 +22,7 @@ import           Data.Maybe
 import           Data.Ord
 import           Data.STRef
 import           Data.Text (Text)
+import           Data.Text.Lazy.Encoding (decodeUtf8)
 
 -- | Generate the JSON from a source mapping.
 generate :: SourceMapping -> Value
@@ -30,7 +31,7 @@ generate SourceMapping{..} = Object (Map.fromList obj) where
         ,("file",toJSON smFile)
         ,("sources",toJSON sources)
         ,("names",toJSON names)
-        ,("mappings",toJSON (encodeMappings sources names smMappings))] ++
+        ,("mappings",toJSON (decodeUtf8 (encodeMappings sources names smMappings)))] ++
         [("sourceRoot",toJSON root) | Just root <- [smSourceRoot]]
   names = nub $ mapMaybe mapName smMappings
   sources = symbols mapSourceFile
