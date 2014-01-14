@@ -15,7 +15,7 @@ build-type:          Simple
 cabal-version:       >=1.8
 
 library
-  ghc-options: -O2
+  ghc-options: -O2 -Wall
   exposed-modules:     SourceMap, SourceMap.Types
   other-modules:       VLQ
   hs-source-dirs:      src
@@ -28,10 +28,11 @@ library
                        utf8-string,
                        text
 
-test-suite test-node
+
+test-suite nodejs
     type:       exitcode-stdio-1.0
-    main-is:    Test.hs
-    hs-source-dirs: src
+    main-is:    Node.hs
+    hs-source-dirs: src test
     build-depends: base,
                    sourcemap,
                    process,
@@ -40,3 +41,13 @@ test-suite test-node
                    aeson,
                    text,
                    unordered-containers
+
+benchmark vlq
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   src bench
+  main-is:          Bench/VLQ.hs
+  build-depends:    base,
+                    criterion,
+                    bytestring,
+                    random
+  ghc-options:      -O2 -Wall
