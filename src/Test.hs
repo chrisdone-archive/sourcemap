@@ -1,26 +1,44 @@
+{-# LANGUAGE BangPatterns #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
-module Test where
+-- | This test suite requires the source-map node package. That is the
+-- reference implementation, so we generate sourcemaps and compare
+-- them with what the source-map package would generate.
 
-import           SourceMap.Types
+module Main where
+
 import           SourceMap
+import           SourceMap.Types
 
-import           Control.Monad hiding (forM_)
-import           Control.Monad.ST
 import           Data.Aeson
-import           Data.ByteString.Lazy (ByteString)
-import qualified Data.ByteString.Lazy as Bytes
+import qualified Data.ByteString.Lazy.Char8 as Bytes
 import qualified Data.ByteString.Lazy.UTF8 as Bytes
-import           Data.Foldable (forM_)
-import qualified Data.HashMap.Lazy as Map
 import           Data.List
-import           Data.Maybe
-import           Data.Ord
-import           Data.STRef
-import           Data.Word
+import           System.Exit
 import           System.Process.Extra
-import qualified VLQ as VLQ
 
+-- | Run the test suite.
+main :: IO ()
+main =
+  compareImplementations
+    SourceMapping { smFile = "out.js"
+                  , smSourceRoot = Nothing
+                  , smMappings = mappings  }
+
+-- | Compare the Haskell implementation with the JavaScript
+-- implementation for the given source mapping.
+compareImplementations :: SourceMapping -> IO ()
+compareImplementations m = do
+  !n <- generateNode m
+  let !h = generate m
+  if h == n
+     then exitSuccess
+     else do putStr $ "Node:    "; Bytes.putStrLn $ encode n
+             putStr "Haskell: "; Bytes.putStrLn $ encode h
+             exitFailure
+
+-- | Generate a source map using the nodejs source-map package.
 generateNode :: SourceMapping -> IO Value
 generateNode SourceMapping{..} = do
   result <- readAllFromProcess' "node" [] source
@@ -50,15 +68,8 @@ generateNode SourceMapping{..} = do
             ["});"]
         showPos Pos{..} = "{ line: " ++ show posLine ++ ", column: " ++ show posColumn ++ " }"
 
-go m = do
-  n <- generateNode m
-  putStr $ "node:    "; Bytes.putStrLn $ encode n
-  let h = generate m
-  putStr "haskell: "; Bytes.putStrLn $ encode h
-  putStrLn $ if  h == n then "OK" else "MISMATCH!"
-
-gop xs = go SourceMapping { smFile = "out.js", smSourceRoot = Nothing, smMappings = xs }
-
+-- | A sample source mapping.
+mappings :: [Mapping]
 mappings =
   [Mapping {
         mapGenerated = Pos 1 1,

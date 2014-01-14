@@ -27,3 +27,16 @@ library
                        process,
                        utf8-string,
                        text
+
+test-suite test-node
+    type:       exitcode-stdio-1.0
+    main-is:    Test.hs
+    hs-source-dirs: src
+    build-depends: base,
+                   sourcemap,
+                   process,
+                   utf8-string,
+                   bytestring,
+                   aeson,
+                   text,
+                   unordered-containers
