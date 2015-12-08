@@ -15,8 +15,10 @@ import           Data.Aeson hiding ((.=))
 import           Data.ByteString.Lazy (ByteString)
 import qualified Data.ByteString.Lazy as Bytes
 import           Data.ByteString.Lazy.UTF8 (fromString)
+import           Data.ByteString.Builder (Builder(), lazyByteString, toLazyByteString)
 import           Data.Foldable (forM_)
 import qualified Data.HashMap.Lazy as Map
+import           Data.Monoid
 import           Data.List
 import           Data.Maybe
 import           Data.Ord
@@ -48,7 +50,7 @@ encodeMappings sources names = go . sortBy (comparing mapGenerated) where
     prevOrigLine <- newSTRef 0
     prevName     <- newSTRef 0
     prevSource   <- newSTRef 0
-    result       <- newSTRef Bytes.empty
+    result       <- newSTRef (mempty :: Builder)
     -- Generate the groupings.
     forM_ (zip [0::Integer ..] mappings) $ \(i,Mapping{..}) -> do
       -- Continuations on the same line are separated by “,”, whereas
@@ -88,10 +90,10 @@ encodeMappings sources names = go . sortBy (comparing mapGenerated) where
              result += VLQ.encode (indexOf name names - previousName)
              return (indexOf name names)
     -- Return the byte buffer.
-    readSTRef result
+    toLazyByteString <$> readSTRef result
 
   updating r f = readSTRef r >>= \x -> f x >>= writeSTRef r
-  r += y = modifySTRef r (\x -> Bytes.append x y)
+  r += y = modifySTRef r (<> lazyByteString y)
   x .= y = writeSTRef x y; infixr 1 .=
   indexOf e xs = fromIntegral (fromMaybe 0 (elemIndex e xs))
 
