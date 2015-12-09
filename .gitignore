@@ -3,3 +3,4 @@ dist
 *.o
 *.hi
 TAGS
+.stack-work
