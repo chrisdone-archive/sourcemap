@@ -90,7 +90,7 @@ encodeMappings sources names = go . sortBy (comparing mapGenerated) where
              result += VLQ.encode (indexOf name names - previousName)
              return (indexOf name names)
     -- Return the byte buffer.
-    toLazyByteString <$> readSTRef result
+    fmap toLazyByteString $ readSTRef result
 
   updating r f = readSTRef r >>= \x -> f x >>= writeSTRef r
   r += y = modifySTRef r (<> lazyByteString y)
