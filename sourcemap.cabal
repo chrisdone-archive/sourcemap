@@ -9,18 +9,24 @@ license-file:        LICENSE
 author:              Chris Done
 stability:           alpha
 maintainer:          chrisdone@gmail.com
+bug-reports:         https://github.com/chrisdone/sourcemap/issues
 copyright:           2012 Chris Done
 category:            Development
 build-type:          Simple
-cabal-version:       >=1.8
+cabal-version:       >=1.10
+
+source-repository head
+    type:     git
+    location: https://github.com/chrisdone/sourcemap.git
 
 library
+  default-language:    Haskell2010
   ghc-options: -O2 -Wall
   exposed-modules:     SourceMap, SourceMap.Types
   other-modules:       VLQ
   hs-source-dirs:      src
-  build-depends:       base >= 4 && < 5,
-                       bytestring,
+  build-depends:       base >= 4.5 && < 5,
+                       bytestring >= 0.10.2 && < 0.11,
                        aeson,
                        unordered-containers,
                        attoparsec,
@@ -30,6 +36,7 @@ library
 
 
 test-suite nodejs
+    default-language: Haskell2010
     type:       exitcode-stdio-1.0
     main-is:    Node.hs
     hs-source-dirs: src test
@@ -43,6 +50,7 @@ test-suite nodejs
                    unordered-containers
 
 benchmark vlq
+  default-language: Haskell2010
   type:             exitcode-stdio-1.0
   hs-source-dirs:   src bench
   main-is:          Bench/VLQ.hs
