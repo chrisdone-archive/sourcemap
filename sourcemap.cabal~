@@ -41,8 +41,7 @@ test-suite nodejs
                    bytestring,
                    aeson,
                    text,
-                   unordered-containers,
-                   extra
+                   unordered-containers
 
 benchmark vlq
   type:             exitcode-stdio-1.0
